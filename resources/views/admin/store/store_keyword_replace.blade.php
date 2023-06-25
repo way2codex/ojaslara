@@ -39,6 +39,7 @@
                                 <tr>
                                     <td>{{$item['keyword']}}</td>
                                     <td>{{$item['keyword_replace']}}</td>
+                                    <td><?php echo '<a href="' . route('admin.store_keyword_replace_delete', $item['id']) . '" class="edit mr-2 btn btn-danger btn-sm">Delete</a>'; ?></td>
                                 </tr>
                             <?php } ?>
                         </tbody>

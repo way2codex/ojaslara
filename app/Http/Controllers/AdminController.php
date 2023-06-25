@@ -127,6 +127,7 @@ class AdminController extends Controller
             })
             ->addColumn('action', function ($row) {
                 $btn = "";
+                $btn .= '<a href="' . route('admin.store_keyword_replace', $row['id']) . '" class="edit mr-2 btn btn-info btn-sm">Replace Keyword</a>';
                 $btn .= '<a href="' . route('admin.fetch_manual', $row['id']) . '" class="edit mr-2 btn btn-info btn-sm">Fetch Manual</a>';
                 $btn .= '<a href="' . route('admin.edit_store', $row['id']) . '" class="edit mr-2 btn btn-info btn-sm">Edit</a>';
                 // $btn .= '<a href="javascript:void(0)" class="edit mr-2 btn btn-warning btn-sm">View</a>';
@@ -134,6 +135,11 @@ class AdminController extends Controller
             })
             ->rawColumns(['action', 'logo'])
             ->make(true);
+    }
+    public function store_keyword_replace_delete($keyword_id)
+    {
+        StoreKeywordReplace::where('id', $keyword_id)->delete();
+        return redirect()->back();
     }
     public function fetch_manual($store_id)
     {
@@ -179,7 +185,7 @@ class AdminController extends Controller
                     $item['category_id'] = $store_data['category_id'];
                     $item['store_data'] = $store_data;
                     $item['setting_data'] = $setting_data;
-                    DataController::create_data($item,$per_page);
+                    DataController::create_data($item, $per_page);
                 } catch (\Exception $e) {
                     //enter in log
                 }

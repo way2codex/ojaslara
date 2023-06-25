@@ -55,6 +55,7 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth'], function () {
     
     Route::get('/store_keyword_replace/{store_id}', [AdminController::class, 'store_keyword_replace'])->name('admin.store_keyword_replace');
     Route::post('/save_store_keyword_replace', [AdminController::class, 'save_store_keyword_replace'])->name('admin.save_store_keyword_replace');
+    Route::get('/store_keyword_replace_delete/{keyword_id}', [AdminController::class, 'store_keyword_replace_delete'])->name('admin.store_keyword_replace_delete');
 
     Route::get('/article', [AdminController::class, 'article'])->name('admin.article');
     Route::get('/get_article', [AdminController::class, 'get_article'])->name('admin.get_article');
