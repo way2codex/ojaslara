@@ -12,6 +12,7 @@
 
     <!-- Scripts -->
     <script src='{{ asset("admin_asset/jquery.min.js") }}'></script>
+    <script src='{{ asset("admin_asset/jquery.datetimepicker.full.min.js") }}'></script>
     <script src='{{ asset("admin_asset/jquery.dataTables.min.js") }}'></script>
     <script src='{{ asset("admin_asset/jquery.validate.min.js") }}'></script>
     <script src='{{ asset("admin_asset/bootstrap.min.js") }}'></script>
@@ -25,6 +26,7 @@
 
     <!-- Styles -->
     <link href='{{ asset("admin_asset/bootstrap.min.css") }}' rel="stylesheet" />
+    <link href='{{ asset("admin_asset/jquery.datetimepicker.min.css") }}' rel="stylesheet" />
     <link href='{{ asset("admin_asset/jquery.dataTables.min.css") }}' rel="stylesheet" />
     <link href='{{ asset("admin_asset/dataTables.bootstrap4.min.css") }}' rel="stylesheet" />
     <style>
@@ -36,7 +38,7 @@
 
 <body>
     <?php
-  
+
     ?>
     <div id="app">
         <nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm">
@@ -57,7 +59,7 @@
                         <a class="nav-link" href="{{ route('admin.store') }}">Store</a>
                         <a class="nav-link" href="{{ route('admin.category') }}">Category</a>
                         <a class="nav-link" href="{{ route('admin.article') }}">Article</a>
-                        <a class="nav-link" href="{{ route('admin_home') }}">Settigns</a>
+                        <a class="nav-link" href="{{ route('admin.setting') }}">Settigns</a>
                     </ul>
                     @endguest
 
@@ -95,6 +97,13 @@
             @yield('content')
         </main>
     </div>
+    <script>
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            }
+        });
+    </script>
 </body>
 
 

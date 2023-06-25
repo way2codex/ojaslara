@@ -13,7 +13,7 @@ class Store extends Model
     public $table = 'store';
 
     
-    public function store_links(){
-        return $this->hasMany(StoreLinks::class, 'store_id', 'id');
+    public function store_keyword_replace(){
+        return $this->hasMany(StoreKeywordReplace::class, 'store_id', 'id');
     }
 }

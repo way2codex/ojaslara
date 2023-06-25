@@ -12,43 +12,32 @@
                         <input type="hidden" name="id" value="{{ $store_data['id'] }}" id="id" />
                         <input type="hidden" name="old_logo" id="old_logo" value="{{ $store_data['logo'] }}" />
                         <div class="form-row">
-                            <div class="form-group col-md-6">
+                            <div class="form-group col-md-4">
                                 <label for="inputEmail4">Name</label>
                                 <input type="text" class="form-control" value="{{ $store_data['name'] }}" id="name" name="name" placeholder="Name">
                             </div>
-                            <div class="form-group col-md-6">
-                                <label for="inputEmail4">Email</label>
-                                <input type="text" class="form-control" value="{{ $store_data['email'] }}" id="email" name="email" placeholder="Email">
-                            </div>
-                            <div class="form-group col-md-6">
+                            <div class="form-group col-md-4">
                                 <label for="inputEmail4">Website</label>
                                 <input type="text" class="form-control" value="{{ $store_data['website'] }}" id="website" name="website" placeholder="Website">
                             </div>
-                            <div class="form-group col-md-6">
+                            <div class="form-group col-md-4">
                                 <label for="inputEmail4">Website Url</label>
                                 <input type="text" class="form-control" value="{{ $store_data['website_url'] }}" id="website_url" name="website_url" placeholder="Website Url">
                             </div>
-                            <div class="form-group col-md-6">
-                                <label for="inputEmail4">Phone</label>
-                                <input type="text" class="form-control" value="{{ $store_data['phone'] }}" id="phone" name="phone" placeholder="Phone">
+                            <div class="form-group col-md-4">
+                                <label for="inputEmail4">Category</label>
+                                <select name="category_id" id="category_id" class="form-control">
+                                    <option value="0">All</option>
+                                    <?php foreach ($category_data as $key => $data) { ?>
+                                        <option <?php
+                                            if($data['wp_id'] == $store_data['category_id']){
+                                                echo "selected";
+                                            }
+                                            ?> value="{{$data['wp_id'] }}">{{ $data['name'] }}</option>
+                                    <?php } ?>
+                                </select>
                             </div>
-                            <div class="form-group col-md-6">
-                                <label for="inputEmail4">Tag</label>
-                                <input type="text" class="form-control" value="{{ $store_data['tag_id'] }}" id="tag_id" name="tag_id" placeholder="Tag">
-                            </div>
-                            <div class="form-group col-md-6">
-                                <label for="inputEmail4">Pan</label>
-                                <input type="text" class="form-control" value="{{ $store_data['pan_card'] }}" id="pan_card" name="pan_card" placeholder="Pan">
-                            </div>
-                            <div class="form-group col-md-6">
-                                <label for="inputEmail4">Payment</label>
-                                <input type="text" class="form-control" value="{{ $store_data['payment'] }}" id="payment" name="payment" placeholder="Payment">
-                            </div>
-                            <div class="form-group col-md-6">
-                                <label for="inputPassword4">Logo</label>
-                                <input type="file" class="form-control" id="logo" name="logo">
-                            </div>
-                            <div class="form-group col-md-6">
+                            <div class="form-group col-md-4">
                                 <label for="inputEmail4">Status</label>
                                 <select name="status" id="status" class="form-control">
                                     <option <?php
@@ -63,31 +52,69 @@
                                             ?> value="active">Active</option>
                                 </select>
                             </div>
-                            <div class="form-group col-md-6">
-                                <label for="inputEmail4">About Us Tag</label>
-                                <input type="text" class="form-control" value="{{ $store_data['about_us_tag'] }}" id="about_us_tag" name="about_us_tag" placeholder="Tag">
+                            <div class="form-group col-md-4">
+                                <label for="inputEmail4">Fetch Mode</label>
+                                <select name="data_fetch_mode" id="data_fetch_mode" class="form-control">
+                                    <option <?php
+                                            if ($store_data['data_fetch_mode'] == "auto") {
+                                                echo "selected";
+                                            }
+                                            ?> value="auto">auto</option>
+                                    <option <?php
+                                            if ($store_data['data_fetch_mode'] == "manual") {
+                                                echo "selected";
+                                            }
+                                            ?> value="manual">manual</option>
+                                </select>
                             </div>
-                            <div class="form-group col-md-6">
+                            <div class="form-group col-md-4">
+                                <label for="inputEmail4">Fetch Type</label>
+                                <select name="data_fetch_type" id="data_fetch_type" class="form-control">
+                                    <option <?php
+                                            if ($store_data['data_fetch_type'] == "latest") {
+                                                echo "selected";
+                                            }
+                                            ?> value="latest">latest</option>
+                                    <option <?php
+                                            if ($store_data['data_fetch_type'] == "old") {
+                                                echo "selected";
+                                            }
+                                            ?> value="old">old</option>
+                                    <option <?php
+                                            if ($store_data['data_fetch_type'] == "both") {
+                                                echo "selected";
+                                            }
+                                            ?> value="both">both</option>
+                                </select>
                             </div>
-                            <div class="form-group col-md-6">
-                                <label for="inputPassword4">Header Script</label>
-                                <textarea class="form-control" id="header_script" name="header_script">{{ $store_data['header_script'] }}</textarea>
+                            <div class="form-group col-md-4">
+                                <label for="inputEmail4">Rewrite ?</label>
+                                <select name="is_rewrite" id="is_rewrite" class="form-control">
+                                    <option <?php
+                                            if ($store_data['is_rewrite'] == "true") {
+                                                echo "selected";
+                                            }
+                                            ?> value="true">true</option>
+                                    <option <?php
+                                            if ($store_data['is_rewrite'] == "false") {
+                                                echo "selected";
+                                            }
+                                            ?> value="false">false</option>
+                                </select>
                             </div>
-                            <div class="form-group col-md-6">
-                                <label for="inputPassword4">Sidebar Script</label>
-                                <textarea class="form-control" id="sidebar_script" name="sidebar_script">{{ $store_data['sidebar_script'] }}</textarea>
+                            <div class="form-group col-md-4">
+                                <label for="inputEmail4">Frequency</label>
+                                <input type="text" class="form-control" value="{{ $store_data['freq'] }}" id="freq" name="freq" placeholder="Frequency">
                             </div>
-                            <div class="form-group col-md-6">
-                                <label for="inputPassword4">Footer Script</label>
-                                <textarea class="form-control" id="footer_script" name="footer_script">{{ $store_data['footer_script'] }}</textarea>
+                            <div class="form-group col-md-4">
+                                <label for="inputEmail4">Next Frequency</label>
+                                <input type="text" class="form-control" value="{{ $store_data['next_freq'] }}" id="next_freq" name="next_freq" placeholder="Next Frequency">
                             </div>
+                        </div>
+                        <div class="form-row">
                             <div class="form-group col-md-6">
-                                <label for="inputPassword4">Article Header Script</label>
-                                <textarea class="form-control" id="article_header_script" name="article_header_script">{{ $store_data['article_header_script'] }}</textarea>
-                            </div>
-                            <div class="form-group col-md-6">
-                                <label for="inputPassword4">Article Footer Script</label>
-                                <textarea class="form-control" id="article_footer_script" name="article_footer_script">{{ $store_data['article_footer_script'] }}</textarea>
+                                <label for="inputEmail4">Notes</label>
+                                <textarea class="form-control" id="notes" name="notes">{{ $store_data['notes'] }}</textarea>
                             </div>
                         </div>
                         <button type="submit" class="btn btn-primary">Submit</button>
@@ -99,6 +126,9 @@
 </div>
 <script>
     $(document).ready(function() {
+        $('#next_freq').datetimepicker({
+            format: 'Y-m-d h:i:s',
+        });
         $("#add_form").validate({
             rules: {
                 name: {

@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateStoreLinksTable extends Migration
+class CreateStoreKeywordReplaceTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,12 +13,12 @@ class CreateStoreLinksTable extends Migration
      */
     public function up()
     {
-        Schema::create('store_links', function (Blueprint $table) {
+        Schema::create('store_keyword_replace', function (Blueprint $table) {
             $table->id();
             $table->integer('store_id')->nullable();
-            $table->string('url')->nullable();
+            $table->string('keyword')->nullable();
+            $table->string('keyword_replace')->nullable();
             $table->string('status')->nullable()->default('active')->comment('active,inactve');
-            $table->integer('total_views')->default(0);
             $table->timestamps();
             $table->softDeletes();
         });
@@ -31,6 +31,6 @@ class CreateStoreLinksTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('store_links');
+        Schema::dropIfExists('store_keyword_replace');
     }
 }

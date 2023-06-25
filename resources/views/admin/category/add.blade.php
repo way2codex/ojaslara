@@ -10,11 +10,15 @@
                     <form method="POST" enctype="multipart/form-data" action="{{ route('admin.save_category') }}" id="add_form" name="add_form">
                         @csrf
                         <div class="form-row">
-                            <div class="form-group col-md-6">
+                            <div class="form-group col-md-4">
+                                <label for="inputEmail4">Wp id</label>
+                                <input type="number" class="form-control" id="wp_id" name="wp_id" placeholder="wp id">
+                            </div>
+                            <div class="form-group col-md-4">
                                 <label for="inputEmail4">Name</label>
                                 <input type="text" class="form-control" id="name" name="name" placeholder="Name">
                             </div>
-                            <div class="form-group col-md-6">
+                            <div class="form-group col-md-4">
                                 <label for="inputPassword4">Image</label>
                                 <input type="file" class="form-control" id="image" name="image">
                             </div>

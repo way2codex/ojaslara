@@ -17,9 +17,8 @@
                         <thead>
                             <tr>
                                 <th>No</th>
-                                <th>Logo</th>
                                 <th>Name</th>
-                                <th>Email</th>
+                                <th>Url</th>
                                 <th width="">Action</th>
                             </tr>
                         </thead>
@@ -42,16 +41,12 @@
                     name: 'id'
                 },
                 {
-                    data: 'logo',
-                    name: 'logo'
-                },
-                {
                     data: 'name',
                     name: 'name'
                 },
                 {
-                    data: 'email',
-                    name: 'email'
+                    data: 'website_url',
+                    name: 'website_url'
                 },
                 {
                     data: 'action',

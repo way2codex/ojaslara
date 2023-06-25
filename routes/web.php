@@ -31,6 +31,9 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth'], function () {
     Route::get('/', [AdminController::class, 'index'])->name('admin_index');
     Route::get('/home', [AdminController::class, 'index'])->name('admin_home');
 
+    Route::get('/setting', [AdminController::class, 'setting'])->name('admin.setting');
+    Route::post('/save_setting', [AdminController::class, 'save_setting'])->name('admin.save_setting');
+
     Route::get('/category', [AdminController::class, 'category'])->name('admin.category');
     Route::get('/get_category', [AdminController::class, 'get_category'])->name('admin.get_category');
     Route::get('/add_category', [AdminController::class, 'add_category'])->name('admin.add_category');
@@ -46,7 +49,13 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth'], function () {
     Route::post('/update_store', [AdminController::class, 'update_store'])->name('admin.update_store');
     Route::get('/store_links/{store_id}', [AdminController::class, 'store_links'])->name('admin.store_links');
     Route::post('/save_store_links', [AdminController::class, 'save_store_links'])->name('admin.save_store_links');
+    Route::get('/fetch_manual/{store_id}', [AdminController::class, 'fetch_manual'])->name('admin.fetch_manual');
+    Route::post('/fetch_manual_data', [AdminController::class, 'fetch_manual_data'])->name('admin.fetch_manual_data');
+    Route::post('/store_update_notes', [AdminController::class, 'store_update_notes'])->name('admin.store_update_notes');
     
+    Route::get('/store_keyword_replace/{store_id}', [AdminController::class, 'store_keyword_replace'])->name('admin.store_keyword_replace');
+    Route::post('/save_store_keyword_replace', [AdminController::class, 'save_store_keyword_replace'])->name('admin.save_store_keyword_replace');
+
     Route::get('/article', [AdminController::class, 'article'])->name('admin.article');
     Route::get('/get_article', [AdminController::class, 'get_article'])->name('admin.get_article');
     Route::get('/add_article', [AdminController::class, 'add_article'])->name('admin.add_article');

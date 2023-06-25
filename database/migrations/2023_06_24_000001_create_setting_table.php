@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AddArticleHeaderScriptToStore extends Migration
+class CreateSettingTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,9 +13,13 @@ class AddArticleHeaderScriptToStore extends Migration
      */
     public function up()
     {
-        Schema::table('store', function (Blueprint $table) {
-            $table->text('article_header_script')->nullable();
-            $table->text('article_footer_script')->nullable();
+        Schema::create('setting', function (Blueprint $table) {
+            $table->id();
+            $table->string('api_url');
+            $table->string('api_username');
+            $table->string('api_password');
+            $table->timestamps();
+            $table->softDeletes();
         });
     }
 
@@ -26,8 +30,6 @@ class AddArticleHeaderScriptToStore extends Migration
      */
     public function down()
     {
-        Schema::table('store', function (Blueprint $table) {
-            //
-        });
+        Schema::dropIfExists('setting');
     }
 }

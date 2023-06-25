@@ -10,74 +10,72 @@
                     <form method="POST" enctype="multipart/form-data" action="{{ route('admin.save_store') }}" id="add_form" name="add_form">
                         @csrf
                         <div class="form-row">
-                            <div class="form-group col-md-6">
+                            <div class="form-group col-md-4">
                                 <label for="inputEmail4">Name</label>
                                 <input type="text" class="form-control" id="name" name="name" placeholder="Name">
                             </div>
-                            <div class="form-group col-md-6">
-                                <label for="inputEmail4">Email</label>
-                                <input type="text" class="form-control" id="email" name="email" placeholder="Email">
-                            </div>
-                            <div class="form-group col-md-6">
+                            <div class="form-group col-md-4">
                                 <label for="inputEmail4">Website</label>
                                 <input type="text" class="form-control" id="website" name="website" placeholder="Website">
                             </div>
-                            <div class="form-group col-md-6">
+                            <div class="form-group col-md-4">
                                 <label for="inputEmail4">Website Url</label>
                                 <input type="text" class="form-control" id="website_url" name="website_url" placeholder="Website Url">
                             </div>
-                            <div class="form-group col-md-6">
-                                <label for="inputEmail4">Phone</label>
-                                <input type="text" class="form-control" id="phone" name="phone" placeholder="Phone">
+                            <div class="form-group col-md-4">
+                                <label for="inputEmail4">Category</label>
+                                <select name="category_id" id="category_id" class="form-control">
+                                    <option value="0">All</option>
+                                    <?php foreach ($category_data as $key => $data) { ?>
+                                        <option value="{{$data['wp_id'] }}">{{ $data['name'] }}</option>
+                                    <?php } ?>
+                                </select>
                             </div>
-                            <div class="form-group col-md-6">
-                                <label for="inputEmail4">Tag</label>
-                                <input type="text" class="form-control" id="tag_id" name="tag_id" placeholder="Tag">
-                            </div>
-                            <div class="form-group col-md-6">
-                                <label for="inputEmail4">Pan</label>
-                                <input type="text" class="form-control" id="pan_card" name="pan_card" placeholder="Pan">
-                            </div>
-                            <div class="form-group col-md-6">
-                                <label for="inputEmail4">Payment</label>
-                                <input type="text" class="form-control" id="payment" name="payment" placeholder="Payment">
-                            </div>
-                            <div class="form-group col-md-6">
-                                <label for="inputPassword4">Logo</label>
-                                <input type="file" class="form-control" id="logo" name="logo">
-                            </div>
-                            <div class="form-group col-md-6">
+                            <div class="form-group col-md-4">
                                 <label for="inputEmail4">Status</label>
                                 <select name="status" id="status" class="form-control">
                                     <option value="inactive">InActive</option>
                                     <option value="active">Active</option>
                                 </select>
                             </div>
-                            <div class="form-group col-md-6">
-                                <label for="inputEmail4">About Us Tag</label>
-                                <input type="text" class="form-control" id="about_us_tag" name="about_us_tag" placeholder="Tag">
+                            <div class="form-group col-md-4">
+                                <label for="inputEmail4">Fetch Mode</label>
+                                <select name="data_fetch_mode" id="data_fetch_mode" class="form-control">
+                                    <option value="auto">auto</option>
+                                    <option value="manual">manual</option>
+                                </select>
                             </div>
-                            <div class="form-group col-md-6">
+                            <div class="form-group col-md-4">
+                                <label for="inputEmail4">Fetch Type</label>
+                                <select name="data_fetch_type" id="data_fetch_type" class="form-control">
+                                    <option value="latest">latest</option>
+                                    <option value="old">old</option>
+                                    <option value="both">both</option>
+                                </select>
                             </div>
-                            <div class="form-group col-md-6">
-                                <label for="inputPassword4">Header Script</label>
-                                <textarea class="form-control" id="header_script" name="header_script"></textarea>
+                            <div class="form-group col-md-4">
+                                <label for="inputEmail4">Rewrite ?</label>
+                                <select name="is_rewrite" id="is_rewrite" class="form-control">
+                                    <option value="false">False</option>
+                                    <option value="true">True</option>
+                                </select>
                             </div>
-                            <div class="form-group col-md-6">
-                                <label for="inputPassword4">Sidebar Script</label>
-                                <textarea class="form-control" id="sidebar_script" name="sidebar_script"></textarea>
+                            <div class="form-group col-md-4">
+                                <label for="inputEmail4">Frequency</label>
+                                <input type="text" class="form-control" id="freq" name="freq" placeholder="Frequency">
                             </div>
-                            <div class="form-group col-md-6">
-                                <label for="inputPassword4">Footer Script</label>
-                                <textarea class="form-control" id="footer_script" name="footer_script"></textarea>
+                            <div class="form-group col-md-4" id="">
+                                <label for="inputEmail4">Next Frequency</label>
+                                <input type="text" class="form-control" id="next_freq" name="next_freq" placeholder="Next Frequency">
+                                <span class="input-group-addon">
+                                    <span class="glyphicon glyphicon-calendar"></span>
+                                </span>
                             </div>
+                        </div>
+                        <div class="form-row">
                             <div class="form-group col-md-6">
-                                <label for="inputPassword4">Article Header Script</label>
-                                <textarea class="form-control" id="article_header_script" name="article_header_script"></textarea>
-                            </div>
-                            <div class="form-group col-md-6">
-                                <label for="inputPassword4">Article Footer Script</label>
-                                <textarea class="form-control" id="article_footer_script" name="article_footer_script"></textarea>
+                                <label for="inputEmail4">Notes</label>
+                                <textarea class="form-control" id="notes" name="notes"></textarea>
                             </div>
                         </div>
                         <button type="submit" class="btn btn-primary">Submit</button>
@@ -89,12 +87,19 @@
 </div>
 <script>
     $(document).ready(function() {
+        $('#next_freq').datetimepicker({
+            format: 'Y-m-d h:i:s',
+        });
+
         $("#add_form").validate({
             rules: {
                 name: {
                     required: true,
                 },
-                email: {
+                website: {
+                    required: true,
+                },
+                website_url: {
                     required: true,
                 }
             }

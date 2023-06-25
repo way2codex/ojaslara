@@ -8,6 +8,8 @@ use App\Models\Article;
 use App\Models\Store;
 use App\Models\StoreLinks;
 use App\Models\ArticleWidget;
+use App\Models\Setting;
+use App\Models\StoreKeywordReplace;
 use Illuminate\Support\Str;
 use DataTables;
 
@@ -28,23 +30,7 @@ class AdminController extends Controller
      *
      * @return \Illuminate\Contracts\Support\Renderable
      */
-    public function ck_article_upload(Request $request)
-    {
-        if ($request->hasFile('upload')) {
-            $filenamewithextension = $request->file('upload')->getClientOriginalName();
-            $filename = pathinfo($filenamewithextension, PATHINFO_FILENAME);
-            $extension = $request->file('upload')->getClientOriginalExtension();
-            $filenametostore = $filename . '_' . time() . '.' . $extension;
-            $image = $filenametostore;
-            $request->file('upload')->move("uploads/ck/", $image);
-            $CKEditorFuncNum = $request->input('CKEditorFuncNum');
-            $url = asset('uploads/ck/' . $filenametostore);
-            $msg = 'Image successfully uploaded';
-            $re = "<script>window.parent.CKEDITOR.tools.callFunction($CKEditorFuncNum, '$url', '$msg')</script>";
-            @header('Content-type: text/html; charset=utf-8');
-            echo $re;
-        }
-    }
+
     public function index()
     {
         return view('admin.home');
@@ -57,40 +43,51 @@ class AdminController extends Controller
     {
         return view('admin/store/index');
     }
+    public function setting()
+    {
+        $setting_data = Setting::where('id', 1)->first();
+        return view('admin/setting', compact('setting_data'));
+    }
+    public function save_setting(Request $request)
+    {
+        $data = Setting::where('id', $request->post('id'))
+            ->update(
+                [
+                    'api_url' => $request->post('api_url'),
+                    'api_username' => $request->post('api_username'),
+                    'api_password' => $request->post('api_password')
+                ]
+            );
+        return redirect()->route('admin.setting')->with('success', 'Data Updated Successfully.');
+    }
     public function add_store()
     {
-        return view('admin/store/add');
+        $category_data = Category::get();
+        return view('admin/store/add', compact('category_data'));
     }
     public function edit_store($store_id)
     {
-        $store_data = Store::with('store_links')
+        $store_data = Store::with('store_keyword_replace')
             ->where('id', $store_id)->first();
-        return view('admin/store/edit', compact('store_id', 'store_data'));
+        $category_data = Category::get();
+        return view('admin/store/edit', compact('store_id', 'category_data', 'store_data'));
     }
     public function save_store(Request $request)
     {
-        $file = $request->file('logo');
-        $image = $request->post('name') . rand(1111111111, 9999999999) . "." . $file->getClientOriginalExtension();
-        $file->move("uploads/category/", $image);
 
         $data = Store::create(
             [
                 'name' => $request->post('name'),
-                'logo' => $image,
                 'website' => $request->post('website'),
                 'website_url' => $request->post('website_url'),
-                'email' => $request->post('email'),
-                'tag_id' => $request->post('tag_id'),
-                'phone' => $request->post('phone'),
-                'payment' => $request->post('payment'),
-                'pan_card' => $request->post('pan_card'),
-                'about_us_tag' => $request->post('about_us_tag'),
-                'header_script' => $request->post('header_script'),
-                'sidebar_script' => $request->post('sidebar_script'),
-                'footer_script' => $request->post('footer_script'),
-                'article_header_script' => $request->post('article_header_script'),
-                'article_footer_script' => $request->post('article_footer_script'),
-                'status' => $request->post('status')
+                'category_id' => $request->post('category_id'),
+                'status' => $request->post('status'),
+                'notes' => $request->post('notes'),
+                'data_fetch_mode' => $request->post('data_fetch_mode'),
+                'data_fetch_type' => $request->post('data_fetch_type'),
+                'is_rewrite' => $request->post('is_rewrite'),
+                'freq' => $request->post('freq'),
+                'next_freq' => $request->post('next_freq')
             ]
         );
         if ($data) {
@@ -99,32 +96,20 @@ class AdminController extends Controller
     }
     public function update_store(Request $request)
     {
-        if ($request->hasFile('logo')) {
-            $file = $request->file('logo');
-            $image = $request->post('name') . rand(1111111111, 9999999999) . "." . $file->getClientOriginalExtension();
-            $file->move("uploads/category/", $image);
-        } else {
-            $image = $request->post('old_logo');
-        }
         $data = Store::where('id', $request->post('id'))
             ->update(
                 [
                     'name' => $request->post('name'),
-                    'logo' => $image,
                     'website' => $request->post('website'),
                     'website_url' => $request->post('website_url'),
-                    'email' => $request->post('email'),
-                    'tag_id' => $request->post('tag_id'),
-                    'phone' => $request->post('phone'),
-                    'payment' => $request->post('payment'),
-                    'pan_card' => $request->post('pan_card'),
-                    'about_us_tag' => $request->post('about_us_tag'),
-                    'header_script' => $request->post('header_script'),
-                    'sidebar_script' => $request->post('sidebar_script'),
-                    'footer_script' => $request->post('footer_script'),
-                    'article_header_script' => $request->post('article_header_script'),
-                    'article_footer_script' => $request->post('article_footer_script'),
-                    'status' => $request->post('status')
+                    'category_id' => $request->post('category_id'),
+                    'status' => $request->post('status'),
+                    'notes' => $request->post('notes'),
+                    'data_fetch_type' => $request->post('data_fetch_type'),
+                    'data_fetch_mode' => $request->post('data_fetch_mode'),
+                    'is_rewrite' => $request->post('is_rewrite'),
+                    'freq' => $request->post('freq'),
+                    'next_freq' => $request->post('next_freq')
                 ]
             );
         if ($data) {
@@ -142,7 +127,7 @@ class AdminController extends Controller
             })
             ->addColumn('action', function ($row) {
                 $btn = "";
-                $btn .= '<a href="' . route('admin.store_links', $row['id']) . '" class="edit mr-2 btn btn-info btn-sm">Links</a>';
+                $btn .= '<a href="' . route('admin.fetch_manual', $row['id']) . '" class="edit mr-2 btn btn-info btn-sm">Fetch Manual</a>';
                 $btn .= '<a href="' . route('admin.edit_store', $row['id']) . '" class="edit mr-2 btn btn-info btn-sm">Edit</a>';
                 // $btn .= '<a href="javascript:void(0)" class="edit mr-2 btn btn-warning btn-sm">View</a>';
                 return $btn;
@@ -150,11 +135,94 @@ class AdminController extends Controller
             ->rawColumns(['action', 'logo'])
             ->make(true);
     }
+    public function fetch_manual($store_id)
+    {
+        $store_data = Store::with('store_keyword_replace')
+            ->where('id', $store_id)->first();
+        return view('admin/store/fetch_manual', compact('store_id', 'store_data'));
+    }
+    public function store_update_notes(Request $request)
+    {
+        $store_id = $request->post('store_id');
+        $notes = $request->post('notes');
+        $data = Store::where('id', $store_id)
+            ->update(
+                [
+                    'notes' => $notes
+                ]
+            );
+        return redirect()->back();
+    }
+    public function fetch_manual_data(Request $request)
+    {
+        ini_set('max_execution_time', 0);
+
+        $setting_data = Setting::where('id', 1)->first();
+
+        $target_website_url = "";
+        $store_id = $request->post('store_id');
+        $page = $request->post('page');
+        $per_page = $request->post('per_page');
+
+        $store_data = Store::with('store_keyword_replace')
+            ->where('id', $store_id)->first();
+
+        $website_url = $store_data['website_url'];
+        $curl_data = DataController::fetch_data($website_url, $page, $per_page);
+        $data = json_decode($curl_data['data'], true);
+        $data_count = count($data);
+        $header = $curl_data['header'];
+
+        if ($data_count > 0) {
+            foreach ($data as $key => $item) {
+                try {
+                    $item['category_id'] = $store_data['category_id'];
+                    $item['store_data'] = $store_data;
+                    $item['setting_data'] = $setting_data;
+                    DataController::create_data($item,$per_page);
+                } catch (\Exception $e) {
+                    //enter in log
+                }
+            }
+        }
+        Store::where('id', $store_id)
+            ->update(
+                [
+                    'total_data_count' => $store_data['total_data_count'] + $data_count,
+                    'last_freq_data_count' => $data_count,
+                    'last_freq_completed' => date('Y-m-d h:i:s')
+                ]
+            );
+        $updated_store_data = $store_data->refresh();
+        return response()->json([
+            'data_count' => $data_count,
+            'store_data' => $updated_store_data,
+            'header' => $header
+        ]);
+    }
+    public function store_keyword_replace($store_id)
+    {
+        $store_data = Store::with('store_keyword_replace')
+            ->where('id', $store_id)->first();
+        return view('admin/store/store_keyword_replace', compact('store_id', 'store_data'));
+    }
     public function store_links($store_id)
     {
         $store_data = Store::with('store_links')
             ->where('id', $store_id)->first();
         return view('admin/store/store_links', compact('store_id', 'store_data'));
+    }
+    public function save_store_keyword_replace(Request $request)
+    {
+        $data = StoreKeywordReplace::create(
+            [
+                'keyword' => $request->post('keyword'),
+                'keyword_replace' => $request->post('keyword_replace'),
+                'store_id' => $request->post('store_id'),
+                'status' => 'active',
+            ]
+        );
+        return redirect()->back();
     }
     public function save_store_links(Request $request)
     {
@@ -202,6 +270,7 @@ class AdminController extends Controller
     public function update_category(Request $request)
     {
         $name = $request->post('name');
+        $wp_id = $request->post('wp_id');
         $slug = Str::slug($request->post('name'));
         if ($request->hasFile('image')) {
             $file = $request->file('image');
@@ -215,6 +284,7 @@ class AdminController extends Controller
             ->update(
                 [
                     'name' => $name,
+                    'wp_id' => $wp_id,
                     'image' => $image,
                     'slug' => $slug,
                 ]
@@ -230,6 +300,7 @@ class AdminController extends Controller
     public function save_category(Request $request)
     {
         $name = $request->post('name');
+        $wp_id = $request->post('wp_id');
         $file = $request->file('image');
         $image = $name . rand(1111111111, 9999999999) . "." . $file->getClientOriginalExtension();
         $file->move("uploads/category/", $image);
@@ -238,6 +309,7 @@ class AdminController extends Controller
         $data = Category::create(
             [
                 'name' => $name,
+                'wp_id' => $wp_id,
                 'image' => $image,
                 'slug' => $slug,
             ]
@@ -295,7 +367,7 @@ class AdminController extends Controller
             $file = $request->file('image');
             $image = $name . rand(1111111111, 9999999999) . "." . $file->getClientOriginalExtension();
             $file->move("uploads/article/", $image);
-        }else{
+        } else {
             $image = $request->post('old_image');
         }
 

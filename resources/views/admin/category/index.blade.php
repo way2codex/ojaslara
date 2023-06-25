@@ -17,6 +17,7 @@
                         <thead>
                             <tr>
                                 <th>No</th>
+                                <th>Wp Id</th>
                                 <th>Image</th>
                                 <th>Name</th>
                                 <th width="100px">Action</th>
@@ -39,6 +40,10 @@
             columns: [{
                     data: 'id',
                     name: 'id'
+                },
+                {
+                    data: 'wp_id',
+                    name: 'wp_id'
                 },
                 {
                     data: 'image',

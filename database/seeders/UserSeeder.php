@@ -1,4 +1,5 @@
 <?php
+
 namespace Database\Seeders;
 
 use App\Models\User;
@@ -14,10 +15,14 @@ class UserSeeder extends Seeder
      */
     public function run()
     {
-        User::firstOrCreate([
-            'name' => 'Admin',
-            'email' => env('ADMIN_EMAIL'),
-            'password' => Hash::make(env('ADMIN_PASSWORD'))
-        ]);
+        $user = User::where('email', '=', env('ADMIN_EMAIL'))->first();
+        if ($user === null) {
+            // user doesn't exist
+            User::firstOrCreate([
+                'name' => 'Admin',
+                'email' => env('ADMIN_EMAIL'),
+                'password' => Hash::make(env('ADMIN_PASSWORD'))
+            ]);
+        }
     }
 }
