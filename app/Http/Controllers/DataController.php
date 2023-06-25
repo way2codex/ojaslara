@@ -34,7 +34,7 @@ class DataController extends Controller
         dd('data index');
     }
 
-    static function create_data($data,$pp)
+    static function create_data($data)
     {
         ini_set('max_execution_time', 0);
 
@@ -44,7 +44,7 @@ class DataController extends Controller
         // $username = "api";
         // $password = "mhNZ 65pw dcnh Zttp sSAm M9pB";
 
-        $title = $data['title']['rendered'].'->'.$pp;
+        $title = $data['title']['rendered'];
         $content = $data['content']['rendered'];
         $excerpt = $data['excerpt']['rendered'];
         $status = 'publish';

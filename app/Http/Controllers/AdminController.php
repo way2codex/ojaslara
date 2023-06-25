@@ -185,7 +185,7 @@ class AdminController extends Controller
                     $item['category_id'] = $store_data['category_id'];
                     $item['store_data'] = $store_data;
                     $item['setting_data'] = $setting_data;
-                    DataController::create_data($item, $per_page);
+                    DataController::create_data($item);
                 } catch (\Exception $e) {
                     //enter in log
                 }
